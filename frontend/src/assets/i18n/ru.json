@@ -1,0 +1,9 @@
+{
+  "login": {
+    "username": "Логин",
+    "password": "Пароль",
+    "addUserLogin": "Введите логин пользователя",
+    "addUserPassword": "Введите пароль пользователя",
+    "login": "Войти"
+  }
+}

@@ -1,0 +1,24 @@
+<div style="height: 100px"></div>
+<div class="section d-flex justify-content-center align-middle">
+  <div class="row" *ngFor="let obj of systems">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+      <div class="row">
+        <div class="col-sm">
+          <div class="card text-center">
+            <div class="bg-image hover-zoom">
+              <img src="https://mdbootstrap.com/img/new/standard/nature/182.jpg" class="w-100" />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{obj.name}}</h5>
+              <p class="card-text">{{obj.desc}}</p>
+              <a href="#" class="btn btn-success">Перейти</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-1"></div>
+
+  </div>
+</div>

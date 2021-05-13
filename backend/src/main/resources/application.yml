@@ -1,0 +1,16 @@
+server:
+  http2:
+    enabled: true
+  error:
+    include-stacktrace: ${INCLUDE_ERROR_MESSAGE:always}
+    include-message: ${INCLUDE_ERROR_MESSAGE:always}
+spring.jpa:
+  database: POSTGRESQL
+  #  hibernate.ddl-auto: create-drop
+  show-sql: true
+spring.datasource:
+  platform: postgres
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://178.89.107.30:5432/etp
+  username: postgres
+  password: Engine01@123

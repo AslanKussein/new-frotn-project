@@ -1,0 +1,70 @@
+<div class="main-block">
+  <div class="main-block-dark">
+    <div class="container-sm my-5 py-5 main-section-block">
+
+      <div class="row">
+        <img src="{{logo2}}" style="margin: 0 auto; max-width: 19.75rem; max-height: 10.25rem"/>
+      </div>
+      <div class="row" [formGroup]="loginForm">
+
+        <div class="col">
+          <div class="row">
+            <div class="col-sm">
+              <p class="vitrina text-center">SSO</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm">
+              <label class="montserrat-label" translate>login.username</label>
+              <div class="input-group margin-bottom-sm mb-3">
+                <span class="input-group-addon"><i class="fa fa-user montserrat-icon"></i></span>
+                <input class="form-control" type="text" formControlName="username" (keyup.enter)="login()">
+              </div>
+              <div *ngIf="f.username.touched && f.username.invalid"
+                   class="text-danger text-center">
+                <div *ngIf="f.username.errors.required" translate>login.addUserLogin</div>
+              </div>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm">
+              <label class="montserrat-label" translate>login.password</label>
+              <div class="input-group margin-bottom-sm mb-3">
+                <span class="input-group-addon"><i class="fa fa-key montserrat-icon"></i></span>
+                <input type="password" class="form-control" #x aria-label="password"
+                       aria-describedby="basic-addon2" formControlName="password" (keyup.enter)="login()">
+              </div>
+              <div *ngIf="f.password.touched && f.password.invalid"
+                   class="text-danger text-center">
+                <div *ngIf="f.password.errors.required" translate>login.addUserPassword</div>
+              </div>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm">
+              <select class="form-select" (change)="onChange($event)">
+                <option [value]="i.code" *ngFor="let i of mySelect">{{i.value}}</option>
+              </select>
+
+            </div>
+            <div class="col-sm">
+              <button class="btn float-right color-aqua text-white btn-block enter-btn"
+                      [disabled]="!this.loginForm.valid"
+                      (click)="login()" translate>
+                login.login
+              </button>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
