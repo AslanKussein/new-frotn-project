@@ -32,7 +32,7 @@ html, body, app-root {
 }
 
 .main-section-block {
-  max-width: 35rem;
+  max-width: 33rem;
   background-color: #ffffff !important;
   z-index: 1;
 }
@@ -49,13 +49,6 @@ html, body, app-root {
   margin: 8px;
 }
 
-.show-password {
-  font-size: 0.875rem;
-  color: #656c75;
-  line-height: 0.5rem;
-  text-align: left
-}
-
 .enter-btn {
   background-color: #00b2a8;
   outline-color: #00b2a8;
@@ -66,29 +59,15 @@ html, body, app-root {
   color: #00b2a8;
 }
 
-label, input {
-  position: relative;
-  display: block;
-  padding-right: 76px;
-  width: 170px;
-  box-sizing: border-box;
-}
-
-label::after {
-  content: '.' attr(data-domain);
-  position: absolute;
-  top: 4px;
-  left: 94px;
-  font-size: 12px;
-  display: block;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: bold;
-}
-
 .vitrina {
   font-size: 2.5625rem;
   letter-spacing: 6.23px;
   color: #0d0d0d;
+}
+
+.panel-header:active, .panel-header:focus, .nav-tabs .nav-link.active, .nav-item.show .nav-link, .badge:active {
+  border: 0;
+  border-bottom: 2px solid #00b2a8;
 }
 
 .input-group-text {
@@ -98,4 +77,9 @@ label::after {
 
 .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
   border-right: white;
+}
+
+.errText {
+  font-size: 10px;
+  margin-top: -5px;
 }

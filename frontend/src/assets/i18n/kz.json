@@ -1,6 +1,10 @@
 {
+  "error": {
+    "error": "Қате",
+    "notCorrectLogin": "Кіру мәліметтері жарамсыз"
+  },
   "footer": {
-    "copyright": "Авторские права: ",
+    "copyright": "Авторлық құқықтар: ",
     "companyName": "ЕРДО"
   },
   "login": {
@@ -8,8 +12,11 @@
     "password": "Құпия сөз",
     "addUserLogin": "Пайдаланушы атын енгізіңіз",
     "addUserPassword": "Пайдаланушының құпия сөзін енгізіңіз",
+    "acceptUserAgreements": "Пайдаланушы келісімін қабылдаңыз",
     "login": "Кіру",
     "loginPassword": "Логин және Құпия сөз",
-    "ecp": "ЭСҚ"
+    "ecp": "ЭСҚ",
+    "acceptCondition": "Мен Пайдаланушы келісімінің шарттарын қабылдаймын",
+    "userAccepted": "Пайдаланушы келісімі"
   }
 }

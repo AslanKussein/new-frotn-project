@@ -1,4 +1,8 @@
 {
+  "error": {
+    "error": "Ошибка",
+    "notCorrectLogin": "Не корректные данные для входа"
+  },
   "footer": {
     "copyright": "Авторские права: ",
     "companyName": "ЦРТР"
@@ -8,8 +12,11 @@
     "password": "Пароль",
     "addUserLogin": "Введите логин пользователя",
     "addUserPassword": "Введите пароль пользователя",
+    "acceptUserAgreements": "Примите пользовательские соглашения",
     "login": "Войти",
     "loginPassword": "Логин и пароль",
-    "ecp": "ЭЦП"
+    "ecp": "ЭЦП",
+    "acceptCondition": "Я принимаю условия Пользовательского соглашения",
+    "userAccepted": "Пользовательского соглашения"
   }
 }

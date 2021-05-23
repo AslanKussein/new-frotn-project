@@ -1,30 +1,31 @@
 <div class="main-block">
   <div class="main-block-dark">
-    <div class="container-sm my-5 py-5 main-section-block">
+    <div class="container-sm my-4 py-4 main-section-block">
 
       <div class="row">
-        <img src="../../../assets/images/logo_kk.png" style="margin: 0 auto; max-width: 19.75rem; max-height: 10.25rem" *ngIf="this.lang=='kz'"/>
-        <img src="../../../assets/images/logo_ru.png" style="margin: 0 auto; max-width: 19.75rem; max-height: 10.25rem" *ngIf="this.lang=='ru'"/>
+        <img src="../../../assets/images/logo_kk.png" style="margin: 0 auto; max-width: 19.75rem; max-height: 10.25rem"
+             *ngIf="this.loginForm.value.lang=='kz'"/>
+        <img src="../../../assets/images/logo_ru.png" style="margin: 0 auto; max-width: 19.75rem; max-height: 10.25rem"
+             *ngIf="this.loginForm.value.lang=='ru'"/>
       </div>
 
       <div class="row" [formGroup]="loginForm">
 
         <div class="col">
-          <div class="row">
+          <!--          <div class="row">-->
+          <!--            <div class="col-sm">-->
+          <!--              <p class="vitrina text-center">ШАҢЫРАҚ</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <div class="row my-1">
+            <div class="col-sm-1"></div>
             <div class="col-sm">
-              <p class="vitrina text-center">ШАҢЫРАҚ</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-              <ul class="nav nav-tabs " id="ex1" role="tablist">
+              <ul class="nav nav-tabs" id="ex1" role="tablist">
                 <li class="nav-item" role="presentation">
                   <a
-                    class="nav-link active"
-                    id="ex1-tab-1"
+                    class="nav-link panel-header"
+                    [ngClass]="selectedTab == 1 ? 'active' : ''"
                     data-mdb-toggle="tab"
-                    href="#ex1-tabs-1"
                     role="tab"
                     aria-controls="ex1-tabs-1"
                     aria-selected="true"
@@ -36,9 +37,8 @@
                 <li class="nav-item" role="presentation">
                   <a
                     class="nav-link"
-                    id="ex1-tab-2"
+                    [ngClass]="selectedTab == 2 ? 'active' : ''"
                     data-mdb-toggle="tab"
-                    href="#ex1-tabs-2"
                     role="tab"
                     aria-controls="ex1-tabs-2"
                     aria-selected="false"
@@ -50,7 +50,7 @@
               </ul>
               <div class="tab-content" id="ex1-content">
                 <div
-                  class="tab-pane fade"
+                  class="tab-pane fade my-2"
                   [ngClass]="selectedTab == 1 ? 'active show' : ''"
                   id="ex1-tabs-1"
                   role="tabpanel"
@@ -64,7 +64,7 @@
                         <input class="form-control" type="text" formControlName="username" (keyup.enter)="login()">
                       </div>
                       <div *ngIf="f.username.touched && f.username.invalid"
-                           class="text-danger text-center">
+                           class="text-danger text-center errText">
                         <div *ngIf="f.username.errors.required" translate>login.addUserLogin</div>
                       </div>
                     </div>
@@ -79,34 +79,48 @@
                                aria-describedby="basic-addon2" formControlName="password" (keyup.enter)="login()">
                       </div>
                       <div *ngIf="f.password.touched && f.password.invalid"
-                           class="text-danger text-center">
+                           class="text-danger text-center errText">
                         <div *ngIf="f.password.errors.required" translate>login.addUserPassword</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2"
+                <div class="tab-pane fade my-2" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2"
                      [ngClass]="selectedTab == 2 ? 'active show' : ''">
-                  В разработке
+                  <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm">
+                      <label for="formFileLg" class="form-label">Large file input example</label>
+                      <input class="form-control form-control-sm-12" id="formFileLg" type="file"/>
+                    </div>
+                    <div class="col-sm-1"></div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="col-sm-2"></div>
+            <div class="col-sm-1"></div>
           </div>
           <div class="row">
-            <div class="col-sm-2"></div>
+            <div class="col-sm-1"></div>
             <div class="col-sm">
-              <ng-select
-                placeholder="Роль"
-                bindValue="value"
-                [items]="roles"
-                [(ngModel)]="filter.roles">
-              </ng-select>
-
-              <select class="form-select" (change)="onChange($event)">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="accept">
+                <a class="col-sm-12 " (click)="openModal(template)" translate>
+                  login.acceptCondition
+                </a>
+              </div>
+              <div *ngIf="f.accept.invalid" class="text-danger text-center errText my-1">
+                <div *ngIf="f.accept.errors.required" translate>login.acceptUserAgreements</div>
+              </div>
+            </div>
+            <div class="col-sm-1"></div>
+          </div>
+          <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm">
+              <select class="form-select" formControlName="lang" (change)="onChange()">
                 <option [value]="i.code" *ngFor="let i of mySelect">{{i.value}}</option>
               </select>
-
             </div>
             <div class="col-sm">
               <button class="btn float-right color-aqua text-white btn-block enter-btn"
@@ -115,10 +129,26 @@
                 login.login
               </button>
             </div>
-            <div class="col-sm-2"></div>
+            <div class="col-sm-1"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" translate>login.userAccepted</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true" class="text-danger">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+    type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of
+    Lorem Ipsum.
+  </div>
+</ng-template>

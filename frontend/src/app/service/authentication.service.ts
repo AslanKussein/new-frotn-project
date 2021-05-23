@@ -3,10 +3,10 @@ import {HttpClient, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {first, map, tap} from 'rxjs/operators';
 import {ConfigService} from "./config.service";
-import {ActivatedRoute} from "@angular/router";
 import {User} from "../models/users";
 import {Util} from "./util";
 import {NotificationService} from "./notification.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService implements OnDestroy {
@@ -26,7 +26,7 @@ export class AuthenticationService implements OnDestroy {
               private configService: ConfigService,
               private util: Util,
               private notifyService: NotificationService,
-              private activatedRoute: ActivatedRoute) {
+              public translate: TranslateService) {
     this.currentUserSubject = new BehaviorSubject<User>(this.util.getCurrentUser());
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -41,6 +41,8 @@ export class AuthenticationService implements OnDestroy {
   }
 
   login(loginForm: any, id: number) {
+    this.options.headers.set('lang', <string>this.util.getItem('lang'));
+
     this.subscriptions.add(this.loginIDP(loginForm?.value)
       .pipe(first())
       .subscribe(
@@ -69,11 +71,15 @@ export class AuthenticationService implements OnDestroy {
           // }
         },
         () => {
-          this.notifyService.showError('Ошибка', 'Не корректные данные для входа')
+          this.translate.get('error.notCorrectLogin', {value: 'world'}).subscribe((res: string) => {
+            this.notifyService.showError('', res)
+          });
         }));
   }
 
   loginIDP(loginForm: any) {
+
+    this.options.headers.set('lang', <string>this.util.getItem('lang'));
 
     const body_ = new HttpParams()
       .set('username', loginForm.username)
@@ -84,7 +90,7 @@ export class AuthenticationService implements OnDestroy {
     return this.http.post<any>(`${this.configService.authUrl}`, body_.toString(), this.options).pipe(map(user => {
       if (user && user.access_token) {
         this.storeTokens(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.util.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
       }
 
@@ -93,6 +99,7 @@ export class AuthenticationService implements OnDestroy {
   }
 
   refreshToken() {
+    this.options.headers.set('lang', <string>this.util.getItem('lang'));
     const body_ = new HttpParams()
       .set('refresh_token', <string>this.getRefreshToken())
       .set('grant_type', 'refresh_token')
@@ -111,20 +118,20 @@ export class AuthenticationService implements OnDestroy {
     //   this.notificationsUtil.webSocketDisconnect();
     //   // this.util.refresh();
     // }
-    localStorage.setItem('action', 'logout');
+    this.util.setItem('action', 'logout');
   }
 
   getJwtToken() {
-    return localStorage.getItem(this.JWT_TOKEN);
+    return this.util.getItem(this.JWT_TOKEN);
   }
 
   public storeTokens(tokens: User) {
-    localStorage.setItem(this.JWT_TOKEN, <string>tokens.access_token);
-    localStorage.setItem(this.REFRESH_TOKEN, <string>tokens.refresh_token);
+    this.util.setItem(this.JWT_TOKEN, <string>tokens.access_token);
+    this.util.setItem(this.REFRESH_TOKEN, <string>tokens.refresh_token);
   }
 
   private getRefreshToken() {
-    return localStorage.getItem(this.REFRESH_TOKEN);
+    return this.util.getItem(this.REFRESH_TOKEN);
   }
 
   ngOnDestroy() {
