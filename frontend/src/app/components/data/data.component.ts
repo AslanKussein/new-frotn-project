@@ -7,11 +7,7 @@ import {SystemService} from "../../service/system.service";
   styleUrls: ['./data.component.scss']
 })
 export class DataComponent implements OnInit {
-  systems: any = [
-    {name: 'Е-Макет', desc: 'пенсия и пособия'},
-    {name: 'ЦБД', desc: 'пенсия и пособия'},
-    {name: 'ООП', desc: 'пенсия и пособия'},
-  ];
+  systems: any = [];
   loading: any;
 
   constructor(private systemService: SystemService) {

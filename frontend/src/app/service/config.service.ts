@@ -6,7 +6,6 @@ import {Injectable} from '@angular/core';
 export class ConfigService {
   serverUrl = 'http://localhost:8080';
   apiUrl = '/api';
-  openApiUrl = '/open-api';
   authUrl = ' ';
 
 

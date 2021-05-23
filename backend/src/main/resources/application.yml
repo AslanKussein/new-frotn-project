@@ -2,15 +2,14 @@ server:
   http2:
     enabled: true
   error:
-    include-stacktrace: ${INCLUDE_ERROR_MESSAGE:always}
-    include-message: ${INCLUDE_ERROR_MESSAGE:always}
+    include-stacktrace: always
+    include-message: always
 spring.jpa:
-  database: POSTGRESQL
-  #  hibernate.ddl-auto: create-drop
+  database: oracle
   show-sql: true
 spring.datasource:
-  platform: postgres
-  driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://178.89.107.30:5432/etp
-  username: postgres
-  password: Engine01@123
+  platform: oracle
+  driverClassName: oracle.jdbc.OracleDriver
+  url: jdbc:postgresql://172.16.17.65:5432/etp
+  username: websecuirty
+  password: wbs123t4

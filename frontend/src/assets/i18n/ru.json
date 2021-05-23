@@ -1,9 +1,15 @@
 {
+  "footer": {
+    "copyright": "Авторские права: ",
+    "companyName": "ЦРТР"
+  },
   "login": {
     "username": "Логин",
     "password": "Пароль",
     "addUserLogin": "Введите логин пользователя",
     "addUserPassword": "Введите пароль пользователя",
-    "login": "Войти"
+    "login": "Войти",
+    "loginPassword": "Логин и пароль",
+    "ecp": "ЭЦП"
   }
 }

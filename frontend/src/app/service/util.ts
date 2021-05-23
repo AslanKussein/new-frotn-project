@@ -16,7 +16,7 @@ export class Util {
   }
 
   dnHref(href: any) {
-    localStorage.setItem('url', href);
+    this.setItem('url', href);
     this.router.navigate([href]);
   }
 
@@ -34,6 +34,18 @@ export class Util {
 
   getCurrentUser() {
     return JSON.parse(<string>localStorage.getItem('currentUser'))
+  }
+
+  setItem(key: string, value: string) {
+    localStorage.setItem(key, value);
+  }
+
+  getItem(key: string) {
+    return localStorage.getItem(key);
+  }
+
+  removeItem(key: string) {
+    localStorage.removeItem(key);
   }
 
   getError() {

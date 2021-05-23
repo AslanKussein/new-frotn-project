@@ -59,10 +59,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/api/**").permitAll()
-                .antMatchers("/api/v2/api-docs", "/api/configuration/ui", "/api/swagger-resources/**", "/api/configuration/security", "/api/swagger-ui.html", "/api/webjars/**").permitAll()
-                .antMatchers("/open-api/**").permitAll()
+                .antMatchers(getPermitAllUrls()).permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+    }
+
+    private String[] getPermitAllUrls() {
+        return new String[]{
+                "/api/v2/api-docs",
+                "/api/configuration/ui",
+                "/api/swagger-resources/**",
+                "/api/configuration/security",
+                "/api/swagger-ui.html",
+                "/api/webjars/**"
+        };
     }
 }

@@ -1,9 +1,15 @@
 {
+  "footer": {
+    "copyright": "Авторские права: ",
+    "companyName": "ЕРДО"
+  },
   "login": {
     "username": "Пайдаланушы",
     "password": "Құпия сөз",
     "addUserLogin": "Пайдаланушы атын енгізіңіз",
     "addUserPassword": "Пайдаланушының құпия сөзін енгізіңіз",
-    "login": "Кіру"
+    "login": "Кіру",
+    "loginPassword": "Логин және Құпия сөз",
+    "ecp": "ЭСҚ"
   }
 }
