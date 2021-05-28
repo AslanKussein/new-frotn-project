@@ -9,7 +9,8 @@ import {catchError, tap} from 'rxjs/operators';
 })
 export class SystemService {
 
-  constructor(private configService: ConfigService, private http: HttpClient) {
+  constructor(private configService: ConfigService,
+              private http: HttpClient) {
   }
 
   public getSystemList(): Observable<any> {

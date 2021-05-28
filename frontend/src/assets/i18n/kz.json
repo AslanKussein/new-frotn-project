@@ -4,8 +4,13 @@
     "notCorrectLogin": "Кіру мәліметтері жарамсыз"
   },
   "footer": {
-    "copyright": "Авторлық құқықтар: ",
-    "companyName": "ЕРДО"
+    "companyName": "ЕХƏҚМ",
+    "companyFullName": "Еңбек және халықты әлеуметтік қорғау министрлігі"
+  },
+  "header": {
+    "logout": "Шығу",
+    "systems": "Жүйелер",
+    "profile": "Профиль"
   },
   "login": {
     "username": "Пайдаланушы",
@@ -13,6 +18,7 @@
     "addUserLogin": "Пайдаланушы атын енгізіңіз",
     "addUserPassword": "Пайдаланушының құпия сөзін енгізіңіз",
     "acceptUserAgreements": "Пайдаланушы келісімін қабылдаңыз",
+    "chooseEcp": "Заңды тұлғаның ЭСҚ-сын таңдаңыз",
     "login": "Кіру",
     "loginPassword": "Логин және Құпия сөз",
     "ecp": "ЭСҚ",

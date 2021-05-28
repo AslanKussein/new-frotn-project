@@ -4,8 +4,13 @@
     "notCorrectLogin": "Не корректные данные для входа"
   },
   "footer": {
-    "copyright": "Авторские права: ",
-    "companyName": "ЦРТР"
+    "companyName": "МТСЗН",
+    "companyFullName": "Министерство труда и социальной защиты населения"
+  },
+  "header": {
+    "logout": "Выход",
+    "systems": "Системы",
+    "profile": "Профиль"
   },
   "login": {
     "username": "Логин",
@@ -13,6 +18,7 @@
     "addUserLogin": "Введите логин пользователя",
     "addUserPassword": "Введите пароль пользователя",
     "acceptUserAgreements": "Примите пользовательские соглашения",
+    "chooseEcp": "Выберите ЭЦП юр. лица",
     "login": "Войти",
     "loginPassword": "Логин и пароль",
     "ecp": "ЭЦП",

@@ -73,7 +73,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.authenticationService.storeTokens(token);
           request = request.clone({
             setHeaders: {
-              Authorization: `Bearer ${token.access_token}`
+              Authorization: `Bearer ${token.access_token}`,
+              lang: <string>this.util.getItem('lang')
             }
           });
           return next.handle(request);
@@ -86,7 +87,8 @@ export class ErrorInterceptor implements HttpInterceptor {
         switchMap(jwt => {
           request = request.clone({
             setHeaders: {
-              Authorization: `Bearer ${jwt}`
+              Authorization: `Bearer ${jwt}`,
+              lang: <string>this.util.getItem('lang')
             }
           });
           return next.handle(request);

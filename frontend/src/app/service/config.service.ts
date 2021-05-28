@@ -11,13 +11,4 @@ export class ConfigService {
 
   constructor() {
   }
-
-  currentLang() {
-    const lang = sessionStorage.getItem('currentLang');
-    if (lang && lang.length > 1) {
-      return lang;
-    } else {
-      return 'kz';
-    }
-  }
 }

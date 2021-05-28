@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/users";
 import {AuthenticationService} from "../../service/authentication.service";
+import {Util} from "../../service/util";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-header',
@@ -10,12 +12,23 @@ import {AuthenticationService} from "../../service/authentication.service";
 export class HeaderComponent implements OnInit {
 
   currentUser!: User;
+  langValue!: string;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService,
+              private translate: TranslateService,
+              public util: Util) {
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   ngOnInit(): void {
+    this.langValue = this.util.getLangValue();
+    this.translate.use(<string>localStorage.getItem('lang'));
   }
 
+  onChange(event: any) {
+    console.log(event.target.id)
+    this.util.setItem('lang', event.target.id);
+    this.translate.use(event.target.id);
+    this.langValue = this.util.getLangValue();
+  }
 }

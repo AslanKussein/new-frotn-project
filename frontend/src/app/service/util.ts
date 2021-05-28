@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {language} from "../../environments/language";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfigService} from "./config.service";
+import {TranslateService} from "@ngx-translate/core";
 
 
 @Injectable({
@@ -9,15 +10,35 @@ import {ConfigService} from "./config.service";
 })
 export class Util {
   _language = language;
+  mySelect: any;
 
   constructor(private router: Router,
               protected route: ActivatedRoute,
-              private configService: ConfigService) {
+              protected translate: TranslateService) {
   }
 
   dnHref(href: any) {
     this.setItem('url', href);
     this.router.navigate([href]);
+  }
+
+  getLang() {
+    this.mySelect = [
+      {code: "ru", value: 'Рус'},
+      {code: "kz", value: 'Қаз'}
+    ];
+    return this.mySelect;
+  }
+
+  getLangValue(): string {
+    let value = 'Рус';
+    let code = this.getItem('lang')
+    this.getLang().forEach(function (element: any) {
+      if (element.code == code) {
+        value = element.value;
+      }
+    });
+    return value;
   }
 
   dnHrefParam(href: any, param: any) {
