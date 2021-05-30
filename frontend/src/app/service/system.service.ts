@@ -14,24 +14,24 @@ export class SystemService {
   }
 
   public getSystemList(): Observable<any> {
-    return this.http.get(`${this.configService.serverUrl.concat(this.configService.apiUrl)}/app/getSystemList`, {})
+    return this.http.get(`${this.configService.serverUrl.concat(this.configService.apiUrl)}/systems/getSystemList`, {})
       .pipe(
         tap(data => {
         }),
-        catchError(this.handleError)
+        catchError(SystemService.handleError)
       );
   }
 
   public getAll(): Observable<any> {
-    return this.http.get(`${this.configService.serverUrl.concat(this.configService.apiUrl)}/app/all`, {})
+    return this.http.get(`${this.configService.serverUrl.concat(this.configService.apiUrl)}/systems/all`, {})
       .pipe(
         tap(data => {
         }),
-        catchError(this.handleError)
+        catchError(SystemService.handleError)
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
+  private static handleError(error: HttpErrorResponse) {
     if (error instanceof ErrorEvent) {
       console.error('An error occurred:', error);
     } else {

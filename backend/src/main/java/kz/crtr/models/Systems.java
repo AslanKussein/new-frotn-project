@@ -1,33 +1,21 @@
 package kz.crtr.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 
 @Data
-@Table
 @Entity
+@Table(name = "D_SSO_SYSTEMS", schema = "SOLIDARY")
 public class Systems implements Serializable {
     @Id
     private Long id;
+    @Column(name = "system_name")
     private String name;
-    private String description;
-    @ManyToOne
-    @JoinColumn(name = "create_by", referencedColumnName = "id")
-    private User createBy;
-    private ZonedDateTime createDate;
-    @ManyToOne
-    @JoinColumn(name = "modify_by", referencedColumnName = "id")
-    private User modifyBy;
-    private ZonedDateTime modifyDate;
-    /**
-     * Флаг удаления
-     */
-    @Column(columnDefinition = "boolean default false")
-    private Boolean deleted;
+    private String url;
+    private String url_etc;
 }

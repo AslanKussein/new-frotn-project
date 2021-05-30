@@ -2,11 +2,10 @@ export class User {
   id?: number;
   username?: string;
   password?: string;
-  access_token?: string;
-  refresh_token?: string;
+  accessToken?: string;
+  refreshToken?: string;
   login?: string;
-  name?: string;
-  surname?: string;
-  group?: string;
+  fullName?: string;
+  branch?: any;
   roles?: [];
 }

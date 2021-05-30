@@ -1,48 +1,46 @@
 package kz.crtr.configs;
 
+import kz.crtr.security.AuthEntryPointJwt;
+import kz.crtr.util.JwtTokenUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
-    }
+    private final JwtTokenFilter jwtAuthenticationFilter;
+    private final JwtTokenUtil tokenUtil;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new ClientWebConfigJava() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("**/api/**")
-                        .allowedMethods("*");
-            }
-        };
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().disable();
+        http.cors().and().csrf().disable().httpBasic().disable();
 
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
                 .and()
@@ -52,17 +50,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .frameOptions()
                 .disable()
                 .and()
-//                .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//                .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .antMatchers(getPermitAllUrls()).permitAll()
+                .and().formLogin().loginPage("/login").usernameParameter("username").passwordParameter("password")
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> tokenUtil.removeToken(httpServletRequest))
                 .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler);
     }
 
     private String[] getPermitAllUrls() {
@@ -72,7 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/api/swagger-resources/**",
                 "/api/configuration/security",
                 "/api/swagger-ui.html",
-                "/api/webjars/**"
+                "/api/webjars/**",
+                "/login"
         };
     }
 }

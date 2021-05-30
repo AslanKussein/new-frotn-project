@@ -7,24 +7,27 @@ import {User} from "../models/users";
 import {Util} from "./util";
 import {NotificationService} from "./notification.service";
 import {TranslateService} from "@ngx-translate/core";
+import {UserService} from "./user.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService implements OnDestroy {
 
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
-  private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
+  private readonly REFRESH_TOKEN = 'refreshToken';
   private readonly JWT_TOKEN = 'JWT_TOKEN';
-  private readonly CLIENT_ID = 'htc';
   subscriptions: Subscription = new Subscription();
 
   options = {
-    headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    headers: new HttpHeaders().set('Content-Type', 'application/json')
   }
 
   constructor(private http: HttpClient,
               private configService: ConfigService,
               private util: Util,
+              private userService: UserService,
+              private activatedRoute: ActivatedRoute,
               private notifyService: NotificationService,
               public translate: TranslateService) {
     this.currentUserSubject = new BehaviorSubject<User>(this.util.getCurrentUser());
@@ -40,40 +43,29 @@ export class AuthenticationService implements OnDestroy {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  login(loginForm: any, id: number) {
+  login(loginForm: any) {
     this.options.headers.set('lang', <string>this.util.getItem('lang'));
-
     this.subscriptions.add(this.loginIDP(loginForm?.value)
       .pipe(first())
       .subscribe(
         param_ => {
-          // this.subscriptions.add(this.userService.findUserByLogin().subscribe(data => {
-          //   if (data != null) {
-          //     param_.name = data.name
-          //     if (!this.util.isNullOrEmpty(data.photoUuid)) {
-          //       param_.photoUuid = this.util.generatorPreviewUrl(data.photoUuid)
-          //     } else {
-          //       param_.photoUuid = 'http://ssl.gstatic.com/accounts/ui/avatar_2x.png'
-          //     }
-          //     param_.surname = data.surname
-          //     param_.login = data.login
-          //     param_.roles = data.roles
-          //     param_.group = data.group
-          //     param_.id = data.id
-          //     param_.organizationDto = data.organizationDto
-          //     localStorage.setItem('currentUser', JSON.stringify(param_));
-          //     localStorage.setItem('password', loginForm.value.password);
-          //     this.notificationsUtil.webSocketConnect(this.currentUserValue)
-          //   }
-          // }));
-          // if (id == 1) {
-          //   this.util.dnHref('/')
-          // }
+          this.subscriptions.add(this.userService.findUserByLogin().subscribe(data => {
+            if (data != null) {
+              param_.fullName = data.fullName
+              param_.username = data.username
+              param_.empId = data.empId
+              param_.branch = data.branch
+              localStorage.setItem('currentUser', JSON.stringify(param_));
+              this.util.dnHref('/home')
+            }
+          }));
         },
         () => {
-          this.translate.get('error.notCorrectLogin', {value: 'world'}).subscribe((res: string) => {
-            this.notifyService.showError('', res)
-          });
+          this.subscriptions.add(
+            this.translate.get('error.notCorrectLogin', {value: 'world'}).subscribe((res: string) => {
+              this.notifyService.showError('', res)
+            })
+          )
         }));
   }
 
@@ -81,14 +73,11 @@ export class AuthenticationService implements OnDestroy {
 
     this.options.headers.set('lang', <string>this.util.getItem('lang'));
 
-    const body_ = new HttpParams()
-      .set('username', loginForm.username)
-      .set('password', loginForm.password)
-      .set('grant_type', 'password')
-      .set('client_id', this.CLIENT_ID);
-
-    return this.http.post<any>(`${this.configService.authUrl}`, body_.toString(), this.options).pipe(map(user => {
-      if (user && user.access_token) {
+    return this.http.post<any>(`${this.configService.authUrl}`.concat('/login'), {
+      username: loginForm.username,
+      password: loginForm.password
+    }, this.options).pipe(map(user => {
+      if (user && user.accessToken) {
         this.storeTokens(user);
         this.util.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
@@ -100,25 +89,28 @@ export class AuthenticationService implements OnDestroy {
 
   refreshToken() {
     this.options.headers.set('lang', <string>this.util.getItem('lang'));
-    const body_ = new HttpParams()
-      .set('refresh_token', <string>this.getRefreshToken())
-      .set('grant_type', 'refresh_token')
-      .set('client_id', this.CLIENT_ID);
-    return this.http.post<any>(`${this.configService.authUrl}`, body_.toString(), this.options)
+    return this.http.post<any>(`${this.configService.authUrl}`.concat('/refreshToken'), {refreshToken: <string>this.getRefreshToken()}, this.options)
       .pipe(tap((tokens: User) => {
         this.storeTokens(tokens);
       }));
   }
 
   logout() {
-    localStorage.clear()
-    // this.currentUserSubject.next(null);
-    // if (!['login'].includes(this.activatedRoute.snapshot['_routerState'].url.split(";")[0].replace('/', ''))) {
-    //   this.util.dnHref('login');
-    //   this.notificationsUtil.webSocketDisconnect();
-    //   // this.util.refresh();
-    // }
-    this.util.setItem('action', 'logout');
+    this.subscriptions.add(this.signOut().pipe(first())
+      .subscribe()
+    )
+  }
+
+  signOut() {
+    return this.http.post<any>(`${this.configService.serverUrl}`.concat('/api/token/logout'), {}, this.options)
+      .pipe(tap(a => {
+        // @ts-ignore
+        this.currentUserSubject.next(null);
+        let systemLang = this.util.getItem('lang');
+        this.util.dnHref('/login');
+        localStorage.clear();
+        this.util.setItem('lang', systemLang == null ? 'ru' : systemLang);
+      }));
   }
 
   getJwtToken() {
@@ -126,8 +118,8 @@ export class AuthenticationService implements OnDestroy {
   }
 
   public storeTokens(tokens: User) {
-    this.util.setItem(this.JWT_TOKEN, <string>tokens.access_token);
-    this.util.setItem(this.REFRESH_TOKEN, <string>tokens.refresh_token);
+    this.util.setItem(this.JWT_TOKEN, <string>tokens.accessToken);
+    this.util.setItem(this.REFRESH_TOKEN, <string>tokens.refreshToken);
   }
 
   private getRefreshToken() {

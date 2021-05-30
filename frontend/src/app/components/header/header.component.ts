@@ -3,6 +3,7 @@ import {User} from "../../models/users";
 import {AuthenticationService} from "../../service/authentication.service";
 import {Util} from "../../service/util";
 import {TranslateService} from "@ngx-translate/core";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
               private translate: TranslateService,
+              private route: Router,
               public util: Util) {
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
@@ -26,9 +28,12 @@ export class HeaderComponent implements OnInit {
   }
 
   onChange(event: any) {
-    console.log(event.target.id)
     this.util.setItem('lang', event.target.id);
     this.translate.use(event.target.id);
     this.langValue = this.util.getLangValue();
+  }
+
+  logout() {
+    this.authenticationService.logout();
   }
 }

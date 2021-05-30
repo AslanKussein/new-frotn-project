@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -33,50 +35,14 @@ public class SystemRestController {
         return ResponseEntity.ok(appService.getAll());
     }
 
-    @ApiOperation(value = "", nickname = "add new System", authorizations = {@Authorization(value = "bearer-key")}, tags = {})
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "NO CONTENT"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDto.class)})
-    @PostMapping(produces = {"application/json"},
-            consumes = {"application/json"})
-    public ResponseEntity<Void> addSystem(SystemDto dto) {
-        appService.addSystem(dto);
-        return ResponseEntity.noContent().build();
-    }
 
-    @ApiOperation(value = "", nickname = "edit System by id", authorizations = {@Authorization(value = "bearer-key")}, tags = {})
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "NO CONTENT"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDto.class)})
-    @PutMapping("{systemId}")
-    public ResponseEntity<Void> editSystem(@PathVariable Long systemId,
-                                           @RequestBody SystemDto dto) {
-        appService.editSystem(systemId, dto);
-        return ResponseEntity.noContent().build();
-    }
-
-    @ApiOperation(value = "", nickname = "remove system by id", authorizations = {
+    @ApiOperation(value = "", nickname = "cancelParkingConnect", notes = "список", response = SystemDto.class, authorizations = {
             @Authorization(value = "bearer-key")}, tags = {})
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "OK"),
+            @ApiResponse(code = 200, message = "OK", response = SystemDto.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDto.class)})
-    @DeleteMapping("/{systemId}")
-    public ResponseEntity<Void> removeSystem(@PathVariable Long systemId) {
-        appService.removeSystem(systemId);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/getSystemList")
+    public ResponseEntity<List<SystemDto>> getSystemList() {
+        return ResponseEntity.ok(appService.getSystemList());
     }
-
-
-//    @ApiOperation(value = "", nickname = "cancelParkingConnect", notes = "список", response = SystemDto.class, authorizations = {
-//            @Authorization(value = "bearer-key")}, tags = {})
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "OK", response = SystemDto.class),
-//            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDto.class)})
-//    @GetMapping("/getSystemList")
-//    public ResponseEntity<List<SystemDto>> getSystemList() {
-//        return ResponseEntity.ok(appService.getSystemList());
-//    }
-//
-
-
 }

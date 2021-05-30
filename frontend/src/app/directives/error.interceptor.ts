@@ -65,15 +65,15 @@ export class ErrorInterceptor implements HttpInterceptor {
 
           let persons = JSON.parse(<string>localStorage.getItem('currentUser'));
 
-          persons.access_token = token.access_token;
-          persons.refresh_token = token.refresh_token;
+          persons.accessToken = token.accessToken;
+          persons.refreshToken = token.refreshToken;
           localStorage.setItem("currentUser", JSON.stringify(persons));
           this.authenticationService.update();
-          this.refreshTokenSubject.next(token.access_token);
+          this.refreshTokenSubject.next(token.accessToken);
           this.authenticationService.storeTokens(token);
           request = request.clone({
             setHeaders: {
-              Authorization: `Bearer ${token.access_token}`,
+              Authorization: `Bearer ${token.accessToken}`,
               lang: <string>this.util.getItem('lang')
             }
           });

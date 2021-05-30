@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {language} from "../../environments/language";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ConfigService} from "./config.service";
 import {TranslateService} from "@ngx-translate/core";
 
 
@@ -19,7 +18,7 @@ export class Util {
 
   dnHref(href: any) {
     this.setItem('url', href);
-    this.router.navigate([href]);
+    this.router.navigateByUrl(href);
   }
 
   getLang() {
@@ -83,5 +82,9 @@ export class Util {
         break;
     }
     return fieldName;
+  }
+
+  nvl(val: any, val2: any) {
+    return this.isNullOrEmpty(val) ? val2 : val;
   }
 }

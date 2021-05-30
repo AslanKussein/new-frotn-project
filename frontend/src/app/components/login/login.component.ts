@@ -16,7 +16,7 @@ import {TranslateService} from "@ngx-translate/core";
 export class LoginComponent implements OnInit {
   mySelect: any = [
     {code: "ru", value: 'Рус'},
-    {code: "kz", value: 'Каз'}
+    {code: "kz", value: 'Қаз'}
   ];
   modalRef!: BsModalRef;
   loginForm: any;
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
               private ngxLoader: NgxUiLoaderService,
               private modalService: BsModalService) {
     if (this.authenticationService.currentUserValue) {
-      this.util.dnHref(['home']);
+      this.util.dnHref('/home')
     }
   }
 
@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.mySelect - this.util.getLang();
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.nullValidator],
       password: ['', Validators.nullValidator],
@@ -56,6 +57,7 @@ export class LoginComponent implements OnInit {
     });
     if (this.util.getItem('lang') == null) {
       this.setValue('lang', 'ru');
+      this.util.setItem('lang', 'ru');
     } else {
       this.setValue('lang', this.util.getItem('lang'));
     }
@@ -92,12 +94,12 @@ export class LoginComponent implements OnInit {
     this.ngxLoader.startBackground()
     this.submitted = true;
 
-    this.authenticationService.login(this.loginForm, 1);
+    this.authenticationService.login(this.loginForm);
 
     this.ngxLoader.stopBackground()
   }
 
-  onUpload(event:any) {
+  onUpload(event: any) {
     this.ngxLoader.startBackground()
 
     if (event.target.files && event.target.files[0]) {
