@@ -24,4 +24,5 @@ spring.datasource:
 auth:
   jwt:
     secret: javamaster
-    expiration: 1000
+    expirationSeconds: 1000
+    expirationRefreshDay: 1

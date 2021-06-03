@@ -24,14 +24,13 @@ public class JwtTokenUtil {
 
     @Value("${auth.jwt.secret}")
     public String SECRET;
-    @Value("${auth.jwt.expiration}")
-    private long expiration;
-
-    private final String ACCESS_TOKEN = "access_token";
-    private final String BEARER = "Bearer ";
+    @Value("${auth.jwt.expirationSeconds}")
+    private long expirationSeconds;
+    @Value("${auth.jwt.expirationRefreshDay}")
+    private long expirationRefreshDay;
 
     public UserTokenState generateToken(String empId, String login) {
-        final Date expiry = Date.from(ZonedDateTime.now().plusSeconds(expiration).toInstant());
+        final Date expiry = Date.from(ZonedDateTime.now().plusSeconds(expirationSeconds).toInstant());
 
         String compact = Jwts.builder()
                 .setId(empId)
@@ -74,10 +73,12 @@ public class JwtTokenUtil {
 
     public String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String BEARER = "Bearer ";
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)) {
             return bearerToken.substring(7);
         }
 
+        String ACCESS_TOKEN = "access_token";
         String access_token = request.getParameter(ACCESS_TOKEN);
         if (!isNullOrEmpty(access_token)) {
             return access_token;
@@ -100,7 +101,7 @@ public class JwtTokenUtil {
     }
 
     public String refreshToken(String token) {
-        final Instant expiry = ZonedDateTime.now().plusYears(1).toInstant();
+        final Instant expiry = ZonedDateTime.now().plusDays(expirationRefreshDay).toInstant();
 
         String refreshedToken;
         try {
