@@ -14,7 +14,7 @@ export class UserService {
   }
 
   findUserByLogin(): Observable<any> {
-    return this.http.post<any>(`${this.configService.serverUrl}/api/users/getUserByName`, {}).pipe(
+    return this.http.post<any>(`${this.configService.apiUrl}/users/getUserByName`, {}).pipe(
       tap(),
       catchError(UserService.handleError)
     );

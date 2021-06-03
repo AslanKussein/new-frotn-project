@@ -47,20 +47,4 @@ public class TokenRestController {
         String jwt = tokenUtil.getJwtFromRequest(request);
         return ResponseEntity.ok(tokenUtil.validateToken(jwt));
     }
-
-//    @PostMapping("/refreshToken")
-//    public ResponseEntity<?> refreshtoken(@Valid @RequestBody RefreshTokenRequestDto request) {
-//        String requestRefreshToken = tokenUtil.refreshToken();
-//
-//        return refreshTokenService.findByToken(requestRefreshToken)
-//                .map(refreshTokenService::verifyExpiration)
-//                .map(RefreshToken::getUser)
-//                .map(user -> {
-//                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
-//                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
-//                })
-//                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
-//                        "Refresh token is not in database!"));
-//    }
-
 }

@@ -1,4 +1,4 @@
-package kz.crtr.controller;
+package kz.crtr.controller.other;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

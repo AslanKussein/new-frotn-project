@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {NgxUiLoaderService} from "ngx-ui-loader";
@@ -18,6 +18,8 @@ export class LoginComponent implements OnInit {
     {code: "ru", value: 'Рус'},
     {code: "kz", value: 'Қаз'}
   ];
+  @Input() imgPath:string = "../../../../img/img_2.png";
+
   modalRef!: BsModalRef;
   loginForm: any;
   selectedTab: number = 1;

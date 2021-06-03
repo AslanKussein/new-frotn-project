@@ -8,6 +8,7 @@ import kz.crtr.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.StringJoiner;
 
 import static java.util.Objects.nonNull;
@@ -30,11 +31,17 @@ public class UserServiceImpl implements UserService {
                     .branch(users.getUserDetail().getBranch())
                     .fullName(buildFullName(users.getUserDetail()));
         }
+        userDtoBuilder.availableSystems(getUserAvailableSystem(users.getEmpId()));
 
         return userDtoBuilder.build();
     }
 
     private String buildFullName(UserDetail userDetail) {
         return new StringJoiner(" ").add(userDetail.getFirstname()).add(userDetail.getLastname()).add(userDetail.getMiddlename()).toString();
+    }
+
+    private Set<String> getUserAvailableSystem(Long empId) {
+
+        return Set.of("em5");
     }
 }

@@ -21,6 +21,7 @@ export class AuthenticationService implements OnDestroy {
 
   options = {
     headers: new HttpHeaders().set('Content-Type', 'application/json')
+      .set('mode', 'no-cors')
   }
 
   constructor(private http: HttpClient,
@@ -96,20 +97,23 @@ export class AuthenticationService implements OnDestroy {
   }
 
   logout() {
-    this.subscriptions.add(this.signOut().pipe(first())
-      .subscribe()
-    )
+    try {
+      this.subscriptions.add(this.signOut().pipe(first())
+        .subscribe()
+      )
+    } finally {
+      // @ts-ignore
+      this.currentUserSubject.next(null);
+      let systemLang = this.util.getItem('lang');
+      this.util.dnHref('/login');
+      localStorage.clear();
+      this.util.setItem('lang', systemLang == null ? 'ru' : systemLang);
+    }
   }
 
   signOut() {
-    return this.http.post<any>(`${this.configService.serverUrl}`.concat('/api/token/logout'), {}, this.options)
+    return this.http.post<any>(`${this.configService.apiUrl}`.concat('/token/logout'), {}, this.options)
       .pipe(tap(a => {
-        // @ts-ignore
-        this.currentUserSubject.next(null);
-        let systemLang = this.util.getItem('lang');
-        this.util.dnHref('/login');
-        localStorage.clear();
-        this.util.setItem('lang', systemLang == null ? 'ru' : systemLang);
       }));
   }
 

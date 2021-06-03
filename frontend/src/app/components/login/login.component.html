@@ -3,7 +3,7 @@
     <div class="container-sm my-4 py-3 main-section-block">
 
       <div class="row">
-        <img src="../../../assets/images/img_2.png" style="margin: 0 auto; max-width:7rem; max-height: 4.25rem"/>
+<!--        <img src="../../../assets/images/img_2.png" style="margin: 0 auto; max-width:7rem; max-height: 4.25rem"/>-->
       </div>
 
       <div class="row" [formGroup]="loginForm">
@@ -89,7 +89,7 @@
                       <label class="montserrat-label" for="uploader" translate>login.chooseEcp</label>
                       <div class="input-group margin-bottom-sm mb-3">
                         <span class="input-group-addon"><i class="fa fa-file montserrat-icon"></i></span>
-                        <input type="file" class="form-control" aria-label="ecp" id="uploader"
+                        <input type="file" class="form-control" aria-label="ecp" id="uploader" [accept]="'.p12'"
                                [readOnly]="!this.loginForm.value.accept" style="display: none"
                                aria-describedby="basic-addon2" formControlName="ecp" (change)="onUpload($event)">
                       </div>

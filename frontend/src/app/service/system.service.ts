@@ -14,7 +14,7 @@ export class SystemService {
   }
 
   public getSystemList(): Observable<any> {
-    return this.http.get(`${this.configService.serverUrl.concat(this.configService.apiUrl)}/systems/getSystemList`, {})
+    return this.http.get(`${this.configService.apiUrl}/systems/getSystemList`, {})
       .pipe(
         tap(data => {
         }),
@@ -23,7 +23,7 @@ export class SystemService {
   }
 
   public getAll(): Observable<any> {
-    return this.http.get(`${this.configService.serverUrl.concat(this.configService.apiUrl)}/systems/all`, {})
+    return this.http.get(`${this.configService.apiUrl}/systems/all`, {})
       .pipe(
         tap(data => {
         }),

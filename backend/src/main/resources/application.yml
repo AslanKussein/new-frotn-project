@@ -6,6 +6,11 @@ server:
     include-message: always
   session:
     tracking-modes: cookie
+  servlet:
+    context-path: /
+    encoding:
+      force-response: true
+      charset: UTF-8
 spring.jpa:
   database: oracle
   show-sql: false

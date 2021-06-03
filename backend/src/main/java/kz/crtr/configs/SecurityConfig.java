@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/**").authenticated()
+                .antMatchers("/open-api/**").permitAll()
                 .antMatchers(getPermitAllUrls()).permitAll()
                 .and().formLogin().loginPage("/login").usernameParameter("username").passwordParameter("password")
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
